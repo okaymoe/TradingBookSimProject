@@ -19,6 +19,7 @@ qt_add_qml_module(appTradingProject
     QML_FILES
         Main.qml
         SOURCES tradingengine.h tradingengine.cpp
+        SOURCES datamanager.h datamanager.cpp
 )
 
 set_target_properties(appTradingProject PROPERTIES
