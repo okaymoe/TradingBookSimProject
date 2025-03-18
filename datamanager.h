@@ -1,10 +1,29 @@
 #ifndef DATAMANAGER_H
 #define DATAMANAGER_H
 
-class DataManager
+#include <QObject>
+#include <QNetworkAccessManager>
+#include <QTimer>
+
+class DataManager : public QObject
 {
+    Q_OBJECT
+    Q_PROPERTY(double currentPrice READ currentPrice NOTIFY currentPriceChanged)
 public:
-    DataManager();
+    explicit DataManager(QObject *parent = nullptr);
+    double currentPrice() const { return m_currentPrice; }
+
+signals:
+    void currentPriceChanged();
+
+private slots:
+    void fetchPrice();
+    void handleNetworkReply();
+
+private:
+    double m_currentPrice = 0.0;
+    QNetworkAccessManager m_manager;
+    QTimer m_timer;
 };
 
-#endif // DATAMANAGER_H
+#endif
