@@ -16,8 +16,10 @@ public:
 signals:
     void currentPriceChanged();
 
-private slots:
+public slots:
     void fetchPrice();
+
+private slots:
     void handleNetworkReply();
 
 private:

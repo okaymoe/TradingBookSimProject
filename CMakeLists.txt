@@ -20,6 +20,9 @@ qt_add_qml_module(appTradingProject
         Main.qml
         SOURCES tradingengine.h tradingengine.cpp
         SOURCES datamanager.h datamanager.cpp
+        RESOURCES
+        RESOURCES resources.qrc
+        SOURCES ordermodel.h ordermodel.cpp
 )
 
 set_target_properties(appTradingProject PROPERTIES
