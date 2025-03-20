@@ -23,6 +23,9 @@ qt_add_qml_module(appTradingProject
         RESOURCES
         RESOURCES resources.qrc
         SOURCES ordermodel.h ordermodel.cpp
+        SOURCES portfoliomanager.h portfoliomanager.cpp
+        RESOURCES
+        QML_FILES TradingTab.qml
 )
 
 set_target_properties(appTradingProject PROPERTIES
