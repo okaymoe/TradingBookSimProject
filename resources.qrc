@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/">
         <file>Main.qml</file>
+        <file>TradingTab.qml</file>
+        <file>PortfolioTab.qml</file>
+        <file>AnalyticsTab.qml</file>
+        <file>SettingsTab.qml</file>
     </qresource>
 </RCC>

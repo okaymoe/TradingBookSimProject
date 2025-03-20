@@ -10,7 +10,10 @@ qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(appTradingProject
     main.cpp
-    TradingEngine.cpp
+    tradingengine.cpp
+    datamanager.cpp
+    ordermodel.cpp
+    portfoliomanager.cpp
 )
 
 qt_add_qml_module(appTradingProject
@@ -18,14 +21,21 @@ qt_add_qml_module(appTradingProject
     VERSION 1.0
     QML_FILES
         Main.qml
-        SOURCES tradingengine.h tradingengine.cpp
-        SOURCES datamanager.h datamanager.cpp
-        RESOURCES
-        RESOURCES resources.qrc
-        SOURCES ordermodel.h ordermodel.cpp
-        SOURCES portfoliomanager.h portfoliomanager.cpp
-        RESOURCES
-        QML_FILES TradingTab.qml
+        TradingTab.qml
+        PortfolioTab.qml
+        AnalyticsTab.qml
+        SettingsTab.qml
+    SOURCES
+        tradingengine.h
+        tradingengine.cpp
+        datamanager.h
+        datamanager.cpp
+        ordermodel.h
+        ordermodel.cpp
+        portfoliomanager.h
+        portfoliomanager.cpp
+    RESOURCES
+        resources.qrc
 )
 
 set_target_properties(appTradingProject PROPERTIES
