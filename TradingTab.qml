@@ -1,8 +1,18 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import TradingProject 1.0
 
 Item {
+    property color cardColor: "#252525"
+    property color accentColor: "#2196F3"
+    property color bgColor: "#1E1E1E"
+    property color textColor: "#E0E0E0"
+    property color secondaryTextColor: "#9E9E9E"
+    property color borderColor: "#333333"
+    property color positiveColor: "#4CAF50"
+    property color negativeColor: "#F44336"
+
     anchors.fill: parent
 
     ColumnLayout {
@@ -10,11 +20,82 @@ Item {
         anchors.margins: 16
         spacing: 16
 
-        // Header with current stock price
+
+        Rectangle {
+            id: newComponentContainer
+            Layout.fillWidth: true
+            Layout.preferredHeight: 300
+            color: cardColor
+            radius: 8
+            anchors.margins: 16
+
+            Chart {
+                anchors.fill: parent
+                chartData: dataManager.candleData
+            }
+        }
+
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 40
+            color: root.cardColor
+            radius: 4
+            anchors.margins: 8
+
+            RowLayout {
+                anchors.fill: parent
+                anchors.margins: 8
+                spacing: 8
+
+                TextField {
+                    id: symbolInput
+                    Layout.fillWidth: true
+                    placeholderText: qsTr("Enter stock symbol (e.g., AAPL)")
+                    text: dataManager.stockSymbol
+                    color: root.textColor
+
+                    background: Rectangle {
+                        color: "#2A2A2A"
+                        border.color: root.borderColor
+                        radius: 4
+                    }
+
+                    onAccepted: updateButton.clicked()
+                }
+
+                Button {
+                    id: updateButton
+                    text: qsTr("Search")
+
+                    contentItem: Text {
+                        text: updateButton.text
+                        color: "#FFFFFF"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+
+                    background: Rectangle {
+                        color: updateButton.down ? Qt.darker(root.accentColor, 1.2) :
+                               updateButton.hovered ? Qt.lighter(root.accentColor, 1.1) : root.accentColor
+                        radius: 4
+                    }
+
+                    onClicked: {
+                        var symbol = symbolInput.text.toUpperCase().trim();
+                        if (symbol !== "") {
+                            dataManager.stockSymbol = symbol;
+                            dataManager.fetchPrice();
+                            dataManager.fetchCandlestickData();
+                        }
+                    }
+                }
+            }
+        }
+
         Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: 120
-            color: root.cardColor
+            color: cardColor
             radius: 8
 
             RowLayout {
@@ -25,12 +106,12 @@ Item {
                 Rectangle {
                     Layout.preferredWidth: 80
                     Layout.preferredHeight: 80
-                    color: root.accentColor
+                    color: accentColor
                     radius: 40
 
                     Text {
                         anchors.centerIn: parent
-                        text: "AAPL"
+                        text: dataManager.stockSymbol
                         font.bold: true
                         font.pixelSize: 20
                         color: "#FFFFFF"
@@ -41,17 +122,19 @@ Item {
                     Layout.fillWidth: true
                     spacing: 4
 
+                    // Display full company name
                     Text {
-                        text: qsTr("Apple Inc.")
+                        text: dataManager.companyName
                         font.pixelSize: 18
                         font.bold: true
-                        color: root.textColor
+                        color: textColor
                     }
 
+                    // Display NASDAQ ticker info
                     Text {
-                        text: qsTr("NASDAQ: AAPL")
+                        text: "NASDAQ: " + dataManager.stockSymbol
                         font.pixelSize: 14
-                        color: root.secondaryTextColor
+                        color: secondaryTextColor
                     }
                 }
 
@@ -63,23 +146,24 @@ Item {
                         text: "$" + dataManager.currentPrice.toFixed(2)
                         font.pixelSize: 32
                         font.bold: true
-                        color: root.textColor
+                        color: textColor
                     }
 
                     Text {
                         text: "+2.45 (1.32%)"
                         font.pixelSize: 16
-                        color: root.positiveColor
+                        color: positiveColor
                     }
                 }
             }
         }
 
+
         //Order Entry Panel
         Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: 200
-            color: root.cardColor
+            color: cardColor
             radius: 8
 
             ColumnLayout {
@@ -91,7 +175,7 @@ Item {
                     text: qsTr("Place Order")
                     font.pixelSize: 18
                     font.bold: true
-                    color: root.textColor
+                    color: textColor
                 }
 
                 GridLayout {
@@ -102,7 +186,7 @@ Item {
 
                     Text {
                         text: qsTr("Symbol:")
-                        color: root.textColor
+                        color: textColor
                         font.pixelSize: 14
                     }
 
@@ -112,16 +196,16 @@ Item {
                         placeholderText: qsTr("AAPL")
                         background: Rectangle {
                             color: "#2A2A2A"
-                            border.color: root.borderColor
+                            border.color: borderColor
                             radius: 4
                         }
-                        color: root.textColor
-                        placeholderTextColor: root.secondaryTextColor
+                        color: textColor
+                        placeholderTextColor: secondaryTextColor
                     }
 
                     Text {
                         text: qsTr("Quantity:")
-                        color: root.textColor
+                        color: textColor
                         font.pixelSize: 14
                     }
 
@@ -132,16 +216,16 @@ Item {
                         inputMethodHints: Qt.ImhDigitsOnly
                         background: Rectangle {
                             color: "#2A2A2A"
-                            border.color: root.borderColor
+                            border.color: borderColor
                             radius: 4
                         }
-                        color: root.textColor
-                        placeholderTextColor: root.secondaryTextColor
+                        color: textColor
+                        placeholderTextColor: secondaryTextColor
                     }
 
                     Text {
                         text: qsTr("Order Type:")
-                        color: root.textColor
+                        color: textColor
                         font.pixelSize: 14
                     }
 
@@ -152,13 +236,13 @@ Item {
 
                         background: Rectangle {
                             color: "#2A2A2A"
-                            border.color: root.borderColor
+                            border.color: borderColor
                             radius: 4
                         }
 
                         contentItem: Text {
                             text: orderTypeCombo.displayText
-                            color: root.textColor
+                            color: textColor
                             verticalAlignment: Text.AlignVCenter
                             leftPadding: 8
                         }
@@ -170,7 +254,7 @@ Item {
 
                             background: Rectangle {
                                 color: "#2A2A2A"
-                                border.color: root.borderColor
+                                border.color: borderColor
                             }
 
                             contentItem: ListView {
@@ -187,14 +271,14 @@ Item {
 
                             contentItem: Text {
                                 text: modelData
-                                color: root.textColor
+                                color: textColor
                                 verticalAlignment: Text.AlignVCenter
                             }
 
                             highlighted: orderTypeCombo.highlightedIndex === index
 
                             background: Rectangle {
-                                color: highlighted ? root.accentColor : "transparent"
+                                color: highlighted ? accentColor : "transparent"
                             }
                         }
                     }
@@ -212,8 +296,8 @@ Item {
                     }
 
                     background: Rectangle {
-                        color: parent.down ? Qt.darker(root.accentColor, 1.2) :
-                               parent.hovered ? Qt.lighter(root.accentColor, 1.1) : root.accentColor
+                        color: parent.down ? Qt.darker(accentColor, 1.2) :
+                               parent.hovered ? Qt.lighter(accentColor, 1.1) : accentColor
                         radius: 4
                         implicitHeight: 40
                         implicitWidth: 120
@@ -223,8 +307,6 @@ Item {
                         var qty = parseInt(quantityField.text)
                         if (!isNaN(qty)) {
                             orderModel.addOrder(symbolField.text, qty, orderTypeCombo.currentText, dataManager.currentPrice)
-
-                            // Update portfolio when placing an order
                             portfolioManager.placeOrder(symbolField.text, qty, dataManager.currentPrice, orderTypeCombo.currentText)
                         }
                     }
@@ -232,11 +314,11 @@ Item {
             }
         }
 
-        //Order list
+        // Order List
         Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            color: root.cardColor
+            color: cardColor
             radius: 8
 
             ColumnLayout {
@@ -248,13 +330,13 @@ Item {
                     text: qsTr("Recent Orders")
                     font.pixelSize: 18
                     font.bold: true
-                    color: root.textColor
+                    color: textColor
                 }
 
                 Rectangle {
                     Layout.fillWidth: true
                     height: 40
-                    color: root.bgColor
+                    color: bgColor
                     radius: 4
 
                     RowLayout {
@@ -267,28 +349,28 @@ Item {
                             Layout.preferredWidth: 100
                             font.pixelSize: 14
                             font.bold: true
-                            color: root.secondaryTextColor
+                            color: secondaryTextColor
                         }
                         Text {
                             text: qsTr("Quantity")
                             Layout.preferredWidth: 100
                             font.pixelSize: 14
                             font.bold: true
-                            color: root.secondaryTextColor
+                            color: secondaryTextColor
                         }
                         Text {
                             text: qsTr("Type")
                             Layout.preferredWidth: 100
                             font.pixelSize: 14
                             font.bold: true
-                            color: root.secondaryTextColor
+                            color: secondaryTextColor
                         }
                         Text {
                             text: qsTr("Price")
                             Layout.fillWidth: true
                             font.pixelSize: 14
                             font.bold: true
-                            color: root.secondaryTextColor
+                            color: secondaryTextColor
                         }
                     }
                 }
@@ -319,26 +401,26 @@ Item {
                                 text: symbol
                                 Layout.preferredWidth: 100
                                 font.pixelSize: 14
-                                color: root.textColor
+                                color: textColor
                             }
                             Text {
                                 text: quantity
                                 Layout.preferredWidth: 100
                                 font.pixelSize: 14
-                                color: root.textColor
+                                color: textColor
                             }
                             Text {
                                 text: orderType
                                 Layout.preferredWidth: 100
                                 font.pixelSize: 14
-                                color: orderType === "Buy" ? root.positiveColor : root.negativeColor
+                                color: orderType === "Buy" ? positiveColor : negativeColor
                                 font.bold: true
                             }
                             Text {
                                 text: "$" + price.toFixed(2)
                                 Layout.fillWidth: true
                                 font.pixelSize: 14
-                                color: root.textColor
+                                color: textColor
                             }
                         }
                     }

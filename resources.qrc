@@ -5,5 +5,6 @@
         <file>PortfolioTab.qml</file>
         <file>AnalyticsTab.qml</file>
         <file>SettingsTab.qml</file>
+        <file>Chart.qml</file>
     </qresource>
 </RCC>

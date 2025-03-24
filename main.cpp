@@ -1,18 +1,27 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include "DataManager.h"
 #include "OrderModel.h"
 #include "PortfolioManager.h"
+#include <QSslSocket>
+
+
+
+
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
+
+    qDebug() << "SSL supported:" << QSslSocket::supportsSsl();
 
     QQmlApplicationEngine engine;
     DataManager dataManager;
     OrderModel orderModel;
     PortfolioManager portfolioManager;
+
+    dataManager.setApiKey("cvgeadpr01qqg993ufggcvgeadpr01qqg993ufh0");
 
     portfolioManager.initializeFunds(100000.0);
 

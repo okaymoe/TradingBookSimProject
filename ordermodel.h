@@ -25,12 +25,10 @@ public:
 
     explicit OrderModel(QObject *parent = nullptr);
 
-    // Overrides
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    // Q_INVOKABLE 2 add 2 orders
     Q_INVOKABLE void addOrder(const QString &symbol, int quantity, const QString &orderType, double price);
 
 private:
